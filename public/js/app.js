@@ -99,6 +99,48 @@ function removeActivity(element){
 
 
 
+/* DAYS */
+
+
+function switchDay (selectedDay){
+	var selectedDayButton = $(selectedDay).text();
+	$("#current-day").removeAttr("id");
+	$(selectedDay).attr("id", "current-day");
+
+	currentDay = selectedDayButton-1;
+	document.getElementById("dayLabel").innerHTML = "Day " + (currentDay+1);
+
+	initialize_gmaps(currentDay);
+
+}
+
+function addDay (addButton){
+	days.push({
+		hotelLocations: [],
+    	restaurantLocations: [],
+    	activityLocations: []
+	});
+
+	$(addButton).before( "<button class=\"btn btn-circle day-btn\" onclick=\"switchDay(this)\">" + days.length + "</button> " );
+
+	switchDay($(addButton).prev());
+}
+
+function removeDay (dayButton){
+	var theDay = $("#dayLabel").text();
+	theDay = Number(theDay.replace("Day ", ""));
+	days.splice(theDay,1);
+	
+	// removing from middle
+
+	// removing from end
+	// removing from front
+
+	
+	$("#current-day").removeAttr("id");
+	//switchDay()
+
+}
 
 
 /* HELPER FUNCTIONS */

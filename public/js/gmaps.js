@@ -58,6 +58,9 @@ function setMapOnAll(map) {
 function initialize_gmaps(day) {
   setMapOnAll(null);
   markers = [];
+  $('#hotel-list').empty();
+  $('#restaurant-list').empty();
+  $('#activities-list').empty();
   // initialize new google maps LatLng object
 
 
