@@ -2,6 +2,10 @@ $(document).ready(function() {
   initialize_gmaps();
 });
 
+var currentDay = (document.getElementById('current-day').innerHTML) -1;
+
+//**** Come back to: a) limit to number of hotels. b) Not allow duplicate items. c) don't load with defaults? ****//
+
 function addHotel(){
   var thisHotel = $("#hotel-selector option:selected").text();
 
@@ -12,9 +16,10 @@ function addHotel(){
   drawLocation(hotelCoordinates, {
     icon: '/images/lodging_0star.png'
   });
+
   addToMapLocations("hotel", hotelCoordinates);
-  
-  $( "#hotel-list" ).append( "<div class=\"itinerary-item\"><span class=\"title\">" + thisHotel + "</span>\n<button class=\"btn btn-xs btn-danger remove btn-circle\" onclick=\"removeHotel()\">x</button></div>" );
+  populateList("hotel", thisHotel);
+
 
 }
 
@@ -28,7 +33,8 @@ function addRestaurant(){
 
   addToMapLocations("restaurant", restaurantCoordinates);
 
-  $( "#restaurant-list" ).append( "<div class=\"itinerary-item\"><span class=\"title\">" + thisRestaurant + "</span>\n<button class=\"btn btn-xs btn-danger remove btn-circle\" onclick=\"removeRestaurant()\">x</button></div>" );
+  populateList("restaurant", thisRestaurant);
+
 
 }
 
@@ -42,8 +48,7 @@ function addActivities(){
   addToMapLocations("activity", activityCoordinates);
 
 
-  $( "#activities-list" ).append( "<div class=\"itinerary-item\"><span class=\"title\">" + thisActivity + "</span>\n<button class=\"btn btn-xs btn-danger remove btn-circle\" onclick=\"removeActivity()\">x</button></div>" );
-
+  populateList("activity", thisActivity);
 }
 
 
@@ -57,21 +62,69 @@ function removeHotel(element){
 	// remove from place array
 	var hotelCoordinates = findCoordinates("hotel", thisHotel);
 	// call function to modify array
-	removeFromArray(hotelLocations, hotelCoordinates);
+	removeFromArray(days[currentDay].hotelLocations, hotelCoordinates);
 	// remove from map
-	initialize_gmaps();
+	initialize_gmaps(currentDay);
+}
+
+
+function removeRestaurant(element){
+	var thisRestaurant = $(element).prev().text();
+
+	// remove from itinerary list
+	$(element).parent().remove();
+
+	// remove from place array
+	var restaurantCoordinates = findCoordinates("restaurant", thisRestaurant);
+	// call function to modify array
+	removeFromArray(days[currentDay].restaurantLocations, restaurantCoordinates);
+	// remove from map
+	initialize_gmaps(currentDay);
+}
+
+function removeActivity(element){
+	var thisActivity = $(element).prev().text();
+
+	// remove from itinerary list
+	$(element).parent().remove();
+
+	// remove from place array
+	var activityCoordinates = findCoordinates("activity", thisActivity);
+
+	// call function to modify array
+	removeFromArray(days[currentDay].activityLocations, activityCoordinates);
+	// remove from map
+	initialize_gmaps(currentDay);
 }
 
 
 
 
 
+/* HELPER FUNCTIONS */
+
+function populateList (type, itemToAdd){
+	var idToModify;
+	if (type==="hotel"){
+		idToModify = "#hotel-list";
+		removeFunx = "removeHotel(this)";
+	} else if (type==="restaurant"){
+		idToModify = "#restaurant-list";
+		removeFunx = "removeRestaurant(this)";
+	} else { // activities
+		idToModify = "#activities-list";
+		removeFunx = "removeActivity(this)";
+	}
+
+	$( idToModify ).append( "<div class=\"itinerary-item\"><span class=\"title\">" + itemToAdd + "</span>\n<button class=\"btn btn-xs btn-danger remove btn-circle\" onclick=\"" + removeFunx + "\">x</button></div>" );
+}
+
 function findCoordinates (type, place){
 	var arrayToSearch;
 	if (type==="hotel"){
 		arrayToSearch = all_hotels;
 	} else if (type==="restaurant"){
-		arrayToSearch = all_restaurants;
+		arrayToSearch = all_restaurants; 
 	} else { // activities
 		arrayToSearch = all_activities;
 	}
@@ -83,24 +136,40 @@ function findCoordinates (type, place){
 	}
 }
 
-function addToMapLocations (type, coords){
-	
+
+function findPlaceName (type, location){
+	var arrayToSearch;
 	if (type==="hotel"){
-		hotelLocation.push(coords);
+		arrayToSearch = all_hotels;
 	} else if (type==="restaurant"){
-		restaurantLocations.push(coords);
+		arrayToSearch = all_restaurants; 
 	} else { // activities
-		activityLocations.push(coords);
+		arrayToSearch = all_activities;
+	}
+
+	for (var i=0; i<arrayToSearch.length; i++){
+		if (arrayToSearch[i].place[0].location[0]==location[0] && arrayToSearch[i].place[0].location[1]==location[1]){
+			return arrayToSearch[i].name;
+		}
 	}
 }
 
-/*var restaurantLocations = [
-  [40.705137, -74.013940],
-  [40.708475, -74.010846]
-];*/
+
+function addToMapLocations (type, coords){
+	
+	if (type==="hotel"){
+		days[currentDay].hotelLocations.push(coords);
+	} else if (type==="restaurant"){
+		days[currentDay].restaurantLocations.push(coords);
+	} else { // activities
+		days[currentDay].activityLocations.push(coords);
+	}
+}
+
 
 function removeFromArray(inputArr, location){
 	//var resultArr;
+
 	for (var i=0; i<inputArr.length; i++){
 		if (inputArr[i][0]==location[0] && inputArr[i][1]==location[1]){
 			inputArr.splice(i,1);
