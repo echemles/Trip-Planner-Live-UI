@@ -129,17 +129,26 @@ function addDay (addButton){
 function removeDay (dayButton){
 	var theDay = $("#dayLabel").text();
 	theDay = Number(theDay.replace("Day ", ""));
-	days.splice(theDay,1);
+	days.splice(theDay-1,1);
+
+  if(days.length === 0){
+    days.push({
+      hotelLocations: [],
+      restaurantLocations: [],
+      activityLocations: []
+    });
+    initialize_gmaps(currentDay);
+  } else if (theDay === 1){
+    switchDay($("#current-day"));
+    $("#current-day").next().remove();
+  } else if (theDay === days.length+1){
+    switchDay($("#current-day").prev());
+    $("#current-day").next().remove();
+  } else {
+    switchDay($("#current-day"));
+    $("#current-day").next().remove();
+  }
 	
-	// removing from middle
-
-	// removing from end
-	// removing from front
-
-	
-	$("#current-day").removeAttr("id");
-	//switchDay()
-
 }
 
 
