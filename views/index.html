@@ -15,12 +15,12 @@
         <div class="panel-body">
           <div>
             <h4>Hotels</h4>
-            <select>
+            <select id="hotel-selector">
               {% for hotel in all_hotels %}
               <option>{{ hotel.name }}</option>
               {% endfor %}
             </select>
-            <button class="btn btn-primary btn-circle pull-right">+</button>
+            <button class="btn btn-primary btn-circle pull-right" onclick="addHotel()">+</button>
           </div>
           <div>
             <h4>Restaurants</h4>
@@ -100,4 +100,11 @@
     </div>
   </div>
 </div>
+<script>
+  {% autoescape false %}
+    var all_hotels = {{ all_hotels | json }};
+    var all_restaurants = {{ all_restaurants | json }};
+    var all_activities = {{ all_activities | json }};
+  {% endautoescape %}
+</script>
 {% endblock %}
