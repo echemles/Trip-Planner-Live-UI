@@ -1,4 +1,4 @@
-var hotelLocation = [40.705137, -74.007624];
+var hotelLocations = [[40.705137, -74.007624]];
 var restaurantLocations = [
   [40.705137, -74.013940],
   [40.708475, -74.010846]
@@ -8,16 +8,9 @@ var activityLocations = [
   [40.707119, -74.003602]
 ];
 
-function drawLocation (location, opts) {
-  if (typeof opts !== 'object') {
-    opts = {}
-  }
-  opts.position = new google.maps.LatLng(location[0], location[1]);
-  opts.map = map;
-  var marker = new google.maps.Marker(opts);
-}
-
+var markers = [];
 var myLatlng = new google.maps.LatLng(40.705189,-74.009209);
+
 // set the map options hash
 var mapOptions = {
   center: myLatlng,
@@ -25,25 +18,50 @@ var mapOptions = {
   mapTypeId: google.maps.MapTypeId.ROADMAP,
   styles: styleArr
 };
+
 // get the maps div's HTML obj
 var map_canvas_obj = document.getElementById("map-canvas");
+
 // initialize a new Google Map with the options
 var map = new google.maps.Map(map_canvas_obj, mapOptions);
+
 // Add the marker to the map
 var marker = new google.maps.Marker({
   position: myLatlng,
   title:"Hello World!"
 });
 
+
+function drawLocation (location, opts) {
+  if (typeof opts !== 'object') {
+    opts = {}
+  }
+  opts.position = new google.maps.LatLng(location[0], location[1]);
+  opts.map = map;
+  var marker = new google.maps.Marker(opts);
+  markers.push(marker);
+}
+
+function setMapOnAll(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+
 function initialize_gmaps() {
+  setMapOnAll(null);
+  markers = [];
   // initialize new google maps LatLng object
 
 
   // draw some locations on the map
   
 
-  drawLocation(hotelLocation, {
-    icon: '/images/lodging_0star.png'
+  hotelLocations.forEach(function(loc){
+      drawLocation(loc, {
+      icon: '/images/lodging_0star.png'
+    });
   });
   restaurantLocations.forEach(function (loc) {
     drawLocation(loc, {

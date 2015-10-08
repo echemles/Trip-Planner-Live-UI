@@ -24,21 +24,21 @@
           </div>
           <div>
             <h4>Restaurants</h4>
-            <select>
+            <select id="restaurant-selector">
               {% for restaurant in all_restaurants %}
               <option>{{ restaurant.name }}</option>
               {% endfor %}
             </select>
-            <button class="btn btn-primary btn-circle pull-right">+</button>
+            <button class="btn btn-primary btn-circle pull-right" onclick="addRestaurant()">+</button>
           </div>
           <div>
             <h4>Activities</h4>
-            <select>
+            <select id="activities-selector">
               {% for activity in all_activities %}
               <option>{{ activity.name }}</option>
               {% endfor %}
             </select>
-            <button class="btn btn-primary btn-circle pull-right">+</button>
+            <button class="btn btn-primary btn-circle pull-right" onclick="addActivities()">+</button>
           </div>
         </div>
       </div>
@@ -62,36 +62,36 @@
         <div class="panel-body">
           <div>
             <h4>My Hotel</h4>
-            <ul class="list-group">
+            <ul class="list-group" id="hotel-list">
               <div class="itinerary-item">
                 <span class="title">Andaz Wall Street</span>
-                <button class="btn btn-xs btn-danger remove btn-circle">x</button>
+                <button class="btn btn-xs btn-danger remove btn-circle" onclick="removeHotel(this)">x</button>
               </div>
             </ul>
           </div>
           <div>
             <h4>My Restaurants</h4>
-            <ul class="list-group">
+            <ul class="list-group" id="restaurant-list">
               <div class="itinerary-item">
                 <span class="title">Bouley</span>
-                <button class="btn btn-xs btn-danger remove btn-circle">x</button>
+                <button class="btn btn-xs btn-danger remove btn-circle" onclick="removeRestaurant(this)">x</button>
               </div>
               <div class="itinerary-item">
                 <span class="title">The Capital Grille</span>
-                <button class="btn btn-xs btn-danger remove btn-circle">x</button>
+                <button class="btn btn-xs btn-danger remove btn-circle" onclick="removeRestaurant(this)">x</button>
               </div>
             </ul>
           </div>
           <div>
             <h4>My Activities</h4>
-            <ul class="list-group">
+            <ul class="list-group" id="activities-list">
               <div class="itinerary-item">
                 <span class="title">Mahayana Buddhist Temple Association</span>
-                <button class="btn btn-xs btn-danger remove btn-circle">x</button>
+                <button class="btn btn-xs btn-danger remove btn-circle" onclick="removeActivity(this)">x</button>
               </div>
               <div class="itinerary-item">
                 <span class="title">South Street Seaport</span>
-                <button class="btn btn-xs btn-danger remove btn-circle">x</button>
+                <button class="btn btn-xs btn-danger remove btn-circle" onclick="removeActivity(this)">x</button>
               </div>
             </ul>
           </div>
